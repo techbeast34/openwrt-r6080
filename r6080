@@ -1,0 +1,661 @@
+Welcome to
+    _______  _______  ___     __  ____   _  _   ___
+    |  ___  \|   __  ||   |   |__||    \ | || | /  /
+    | |___| ||  |__| ||   |__  __ |     \| || |/  /
+    |   _   /|   _   ||      ||  || |\     ||     \
+    |__| \__\|__| |__||______||__||_| \____||_|\___\
+
+                     =System Architecture Department=
+
+# cat /proc/cmdline
+console=ttyS1,57600n8 root=/dev/mtdblock6 rootfstype=squashfs console=ttyS0
+
+# cat /proc/cpuinfo
+system type             : MT7628
+processor               : 0
+cpu model               : MIPS 24Kc V5.5
+BogoMIPS                : 386.04
+wait instruction        : yes
+microsecond timers      : yes
+tlb_entries             : 32
+extra interrupt vector  : yes
+hardware watchpoint     : yes, count: 4, address/irw mask: [0x0000, 0x0050, 0x0340, 0x0570]
+ASEs implemented        : mips16 dsp
+shadow register sets    : 1
+core                    : 0
+VCED exceptions         : not available
+VCEI exceptions         : not available
+
+# cat /proc/meminfo
+MemTotal:          60128 kB
+MemFree:           32704 kB
+Buffers:            1176 kB
+Cached:             5688 kB
+SwapCached:            0 kB
+Active:             4612 kB
+Inactive:           4636 kB
+Active(anon):       2384 kB
+Inactive(anon):        0 kB
+Active(file):       2228 kB
+Inactive(file):     4636 kB
+Unevictable:           0 kB
+Mlocked:               0 kB
+SwapTotal:             0 kB
+SwapFree:              0 kB
+Dirty:                 0 kB
+Writeback:             0 kB
+AnonPages:          2392 kB
+Mapped:             1260 kB
+Shmem:                 0 kB
+Slab:              10000 kB
+SReclaimable:        620 kB
+SUnreclaim:         9380 kB
+KernelStack:         496 kB
+PageTables:          420 kB
+NFS_Unstable:          0 kB
+Bounce:                0 kB
+WritebackTmp:          0 kB
+CommitLimit:       30064 kB
+Committed_AS:       7616 kB
+VmallocTotal:    1048372 kB
+VmallocUsed:        8396 kB
+VmallocChunk:    1018752 kB
+
+# cat /proc/devices
+Character devices:
+  1 mem
+  2 pty
+  3 ttyp
+  4 ttyS
+  5 /dev/tty
+  5 /dev/console
+  5 /dev/ptmx
+ 10 misc
+ 90 mtd
+108 ppp
+128 ptm
+136 pts
+225 /dev/sc_led
+251 apsoc_nvram
+252 gpio
+253 rdm0
+254 bsg
+
+Block devices:
+  1 ramdisk
+259 blkext
+ 31 mtdblock
+
+# ls /sys/devices/platform
+serial8250  uevent
+
+# cat /proc/mtd
+dev:    size   erasesize  name
+mtd0: 00040000 00010000 "Bootloader"
+mtd1: 00020000 00010000 "Factory"
+mtd2: 00010000 00010000 "Ralink Nvram"
+mtd3: 00010000 00010000 "SC_Factory"
+mtd4: 00010000 00010000 "SC_NVRAM"
+mtd5: 00190000 00010000 "Kernel"
+mtd6: 00560000 00010000 "RootFS"
+mtd7: 00020000 00010000 "ML"
+mtd8: 00020000 00010000 "ML1"
+mtd9: 00020000 00010000 "ML2"
+mtd10: 00010000 00010000 "POT"
+mtd11: 00010000 00010000 "Reserved"
+
+# ifconfig -a
+eth2      Link encap:Ethernet  HWaddr --:--:--:--:--:--
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:21963 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:21383 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:2256940 (2.1 MiB)  TX bytes:1641404 (1.5 MiB)
+          Interrupt:3
+
+eth2.1    Link encap:Ethernet  HWaddr --:--:--:--:--:--
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:21963 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:21278 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1949458 (1.8 MiB)  TX bytes:1602855 (1.5 MiB)
+
+eth2.2    Link encap:Ethernet  HWaddr --:--:--:--:--:--
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:105 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:37380 (36.5 KiB)
+
+group1    Link encap:Ethernet  HWaddr --:--:--:--:--:--
+          inet addr:192.168.1.1  Bcast:192.168.1.255  Mask:255.255.255.0
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:21691 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:21194 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1834291 (1.7 MiB)  TX bytes:1508120 (1.4 MiB)
+
+group2    Link encap:Ethernet  HWaddr --:--:--:--:--:--
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+imq0      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:16000  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:11000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+imq1      Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:16000  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:11000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+ip6tnl0   Link encap:UNSPEC  HWaddr 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00
+          NOARP  MTU:1460  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.0  Mask:255.0.0.0
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+ra0       Link encap:Ethernet  HWaddr --:--:--:--:--:--
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:98 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:132 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:12856 (12.5 KiB)  TX bytes:16949 (16.5 KiB)
+          Interrupt:4
+
+ra1       Link encap:Ethernet  HWaddr --:--:--:--:--:--
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+rai0      Link encap:Ethernet  HWaddr --:--:--:--:--:--
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          Interrupt:2
+
+rai1      Link encap:Ethernet  HWaddr --:--:--:--:--:--
+          BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+
+sit0      Link encap:IPv6-in-IPv4
+          NOARP  MTU:1480  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:0 (0.0 B)
+          
+# ls /sys/class/net
+eth2     eth2.2   group2   imq1     lo       ra1      rai1
+eth2.1   group1   imq0     ip6tnl0  ra0      rai0     sit0
+
+# brctl show
+bridge name     bridge id               STP enabled     interfaces
+group1          8000.------------       no              eth2.1
+                                                        ra0
+                                                        rai0
+                                                        rai1
+                                                        ra1
+group2          8000.000000000000       no
+
+# dmesg
+register=0000200f
+Memory: 59964k/65536k available (3551k kernel code, 5516k reserved, 990k data, 164k init, 0k highmem)
+NR_IRQS:128
+console [ttyS1] enabled
+Calibrating delay loop... 386.04 BogoMIPS (lpj=772096)
+pid_max: default: 32768 minimum: 301
+Mount-cache hash table entries: 512
+NET: Registered protocol family 16
+RALINK_GPIOMODE = 570544c4
+RALINK_GPIOMODE = 570444c4
+***** Xtal 40MHz *****
+start PCIe register access
+RALINK_RSTCTRL = 2400000
+RALINK_CLKCFG1 = fdbfffc0
+
+*************** MT7628 PCIe RC mode *************
+PCIE0 enabled
+Port 0 N_FTS = 1b105000
+init_rt2880pci done
+bio: create slab <bio-0> at 0
+pci 0000:00:00.0: reg 10: [mem 0x00000000-0x7fffffff]
+pci 0000:00:00.0: reg 14: [mem 0x00000000-0x0000ffff]
+pci 0000:00:00.0: supports D1
+pci 0000:00:00.0: PME# supported from D0 D1 D3hot
+pci 0000:00:00.0: PME# disabled
+pci 0000:01:00.0: reg 10: [mem 0x00000000-0x000fffff 64bit]
+pci 0000:01:00.0: reg 30: [mem 0x00000000-0x0000ffff pref]
+pci 0000:01:00.0: PME# supported from D0 D3hot D3cold
+pci 0000:01:00.0: PME# disabled
+pci 0000:00:00.0: BAR 0: can't assign mem (size 0x80000000)
+pci 0000:00:00.0: BAR 8: assigned [mem 0x20000000-0x200fffff]
+pci 0000:00:00.0: BAR 9: assigned [mem 0x20100000-0x201fffff pref]
+pci 0000:00:00.0: BAR 1: assigned [mem 0x20200000-0x2020ffff]
+pci 0000:00:00.0: BAR 1: set to [mem 0x20200000-0x2020ffff] (PCI address [0x20200000-0x2020ffff]
+pci 0000:01:00.0: BAR 0: assigned [mem 0x20000000-0x200fffff 64bit]
+pci 0000:01:00.0: BAR 0: set to [mem 0x20000000-0x200fffff 64bit] (PCI address [0x20000000-0x200fffff]
+pci 0000:01:00.0: BAR 6: assigned [mem 0x20100000-0x2010ffff pref]
+pci 0000:00:00.0: PCI bridge to [bus 01-01]
+pci 0000:00:00.0:   bridge window [io  disabled]
+pci 0000:00:00.0:   bridge window [mem 0x20000000-0x200fffff]
+pci 0000:00:00.0:   bridge window [mem 0x20100000-0x201fffff pref]
+PCI: Setting latency timer of device 0000:00:00.0 to 64
+BAR0 at slot 0 = 0
+bus=0x0, slot = 0x0
+res[0]->start = 0
+res[0]->end = 0
+res[1]->start = 20200000
+res[1]->end = 2020ffff
+res[2]->start = 0
+res[2]->end = 0
+res[3]->start = 0
+res[3]->end = 0
+res[4]->start = 0
+res[4]->end = 0
+res[5]->start = 0
+res[5]->end = 0
+bus=0x1, slot = 0x0
+res[0]->start = 20000000
+res[0]->end = 200fffff
+res[1]->start = 0
+res[1]->end = 0
+res[2]->start = 0
+res[2]->end = 0
+res[3]->start = 0
+res[3]->end = 0
+res[4]->start = 0
+res[4]->end = 0
+res[5]->start = 0
+res[5]->end = 0
+Switching to clocksource Ralink Systick timer
+NET: Registered protocol family 2
+IP route cache hash table entries: 1024 (order: 0, 4096 bytes)
+TCP established hash table entries: 2048 (order: 2, 16384 bytes)
+TCP bind hash table entries: 2048 (order: 1, 8192 bytes)
+TCP: Hash tables configured (established 2048 bind 2048)
+TCP reno registered
+UDP hash table entries: 256 (order: 0, 4096 bytes)
+UDP-Lite hash table entries: 256 (order: 0, 4096 bytes)
+NET: Registered protocol family 1
+PCI: CLS 80 bytes, default 32
+squashfs: version 4.0 (2009/01/31) Phillip Lougher
+msgmni has been set to 117
+Block layer SCSI generic (bsg) driver version 0.4 loaded (major 254)
+io scheduler noop registered (default)
+Ralink gpio driver initialized
+Serial: 8250/16550 driver, 2 ports, IRQ sharing disabled
+serial8250: ttyS0 at MMIO 0x10000d00 (irq = 21) is a 16550A
+serial8250: ttyS1 at MMIO 0x10000c00 (irq = 20) is a 16550A
+brd: module loaded
+flash manufacture id: c2, device id 20 17
+MX25L6405D(c2 2017c220) (8192 Kbytes)
+mtd .name = raspi, .size = 0x00800000 (8M) .erasesize = 0x00010000 (64K) .numeraseregions = 0
+Creating 12 MTD partitions on "raspi":
+0x000000000000-0x000000040000 : "Bootloader"
+0x000000040000-0x000000060000 : "Factory"
+0x000000060000-0x000000070000 : "Ralink Nvram"
+0x000000070000-0x000000080000 : "SC_Factory"
+0x000000080000-0x000000090000 : "SC_NVRAM"
+0x000000090000-0x000000220000 : "Kernel"
+0x000000220000-0x000000780000 : "RootFS"
+0x000000780000-0x0000007a0000 : "ML"
+0x0000007a0000-0x0000007c0000 : "ML1"
+0x0000007c0000-0x0000007e0000 : "ML2"
+0x0000007e0000-0x0000007f0000 : "POT"
+0x0000007f0000-0x000000800000 : "Reserved"
+rdm_major = 253
+GMAC1_MAC_ADRH -- : 0x0000000c
+GMAC1_MAC_ADRL -- : 0x43e17629
+Ralink APSoC Ethernet Driver Initilization. v3.1  512 rx/tx descriptors allocated, mtu = 1500!
+GMAC1_MAC_ADRH -- : 0x0000000c
+GMAC1_MAC_ADRL -- : 0x43e17629
+PROC INIT OK!
+PPP generic driver version 2.4.2
+PPP MPPE Compression module registered
+NET: Registered protocol family 24
+PPTP driver version 0.8.5
+IMQ driver loaded successfully.
+        Hooking IMQ before NAT on PREROUTING.
+        Hooking IMQ after NAT on POSTROUTING.
+
+
+=== pAd = c0045000, size = 1023504 ===
+
+ RTMPAllocTxRxRingMemory, Status=0, ErrorValue=0x
+ RTMPAllocAdapterBlock, Status=0
+RtmpChipOpsHook(492): Not support for HIF_MT yet!
+mt7628_init()-->
+mt7628_init(FW(8a00), HW(8a01), CHIPID(7628))
+e2.bin mt7628_init(1135)::(2), pChipCap->fw_len(63888)
+mt_bcn_buf_init(218): Not support for HIF_MT yet!
+mt7628_init()
+Netfilter messages via NETLINK v0.30.
+nf_conntrack version 0.5.0 (936 buckets, 3744 max)
+nf_conntrack_rtsp v0.6.21 loading
+IPVS: Registered protocols ()
+IPVS: Connection hash table configured (size=4096, memory=32Kbytes)
+IPVS: ipvs loaded.
+GRE over IPv4 demultiplexor driver
+gre: can't add protocol
+nf_nat_rtsp v0.6.21 loading
+ip_tables: (C) 2000-2006 Netfilter Core Team, Type=Restricted Cone
+TCP cubic registered
+NET: Registered protocol family 10
+ip6_tables: (C) 2000-2006 Netfilter Core Team
+IPv6 over IPv4 tunneling driver
+NET: Registered protocol family 17
+L2TP core driver, V2.0
+PPPoL2TP kernel driver, V2.0
+L2TP IP encapsulation support (L2TPv3)
+L2TP netlink interface
+L2TP ethernet pseudowire support (L2TPv3)
+802.1Q VLAN Support v1.8 Ben Greear <greearb@candelatech.com>
+All bugs added by David S. Miller <davem@redhat.com>
+VFS: Mounted root (squashfs filesystem) readonly on device 31:6.
+Freeing unused kernel memory: 164k freed
+Algorithmics/MIPS FPU Emulator v1.5
+led_pb_api: module license 'Sercomm' taints kernel.
+Disabling lock debugging due to kernel taint
+Register LED ID <70>
+Register LED ID <91>
+Register LED ID <10>
+Register LED ID <40>
+Register LED ID <46>
+Register LED ID <20>
+Register LED ID <30>
+Register LED ID <62>
+netfilter dnshj choose interested dns queries module loaded !
+init common module successful
+insert firewall block module success
+fake source dos protect modules is inserted
+netfilter PSD and TCP/UDP Echo/Chargen Attack loaded
+netfilter tcp syn flood module loaded
+netfilter clamp total session for one src ip module loaded
+netfilter other dos module loaded
+register rt2860
+PCI: Setting latency timer of device 0000:01:00.0 to 64
+
+
+=== pAd = c0982000, size = 1735664 ===
+
+ RTMPAllocTxRxRingMemory, Status=0
+ RTMPAllocAdapterBlock, Status=0
+pAd->CSRBaseAddress =0xc0880000, csr_addr=0xc0880000!
+device_id =0x7662
+==>rlt_wlan_chip_onoff(): OnOff:1, Reset= 1, pAd->WlanFunCtrl:0x0, Reg-WlanFunCtrl=0x20a
+RtmpChipOpsEepromHook::e2p_type=0, inf_Type=5
+RtmpEepromGetDefault::e2p_dafault=2
+NVM is efuse and the information is too less to bring up the interface
+Force to use Flash mode
+NVM is FLASH mode (pAd->flash_offset = 0x8000)
+get_dev_name_prefix(): dev_idx = 1, dev_name_prefix=rai
+ 0: C:43:FFFFFFE1:76:29
+Raeth v3.1 (Tasklet)
+
+phy_tx_ring = 0x02916000, tx_ring = 0xa2916000
+
+phy_rx_ring0 = 0x02918000, rx_ring0 = 0xa2918000
+GMAC1_MAC_ADRH -- : 0x0000000c
+GMAC1_MAC_ADRL -- : 0x43e17629
+RT305x_ESW: Link Status Changed reg_int_val is 4000000, 4000000
+ra2880stop()...Done
+Free TX/RX Ring Memory!
+ 0: C:43:FFFFFFE1:76:29
+Raeth v3.1 (Tasklet)
+
+phy_tx_ring = 0x03160000, tx_ring = 0xa3160000
+
+phy_rx_ring0 = 0x03162000, rx_ring0 = 0xa3162000
+GMAC1_MAC_ADRH -- : 0x0000000c
+GMAC1_MAC_ADRL -- : 0x43e17629
+RT305x_ESW: Link Status Changed reg_int_val is 4000000, 4000000
+device eth2 entered promiscuous mode
+RT305x_ESW: Link Status Changed reg_int_val is 4000000, 4000000
+device eth2.1 entered promiscuous mode
+group1: port 1(eth2.1) entering learning state
+group1: port 1(eth2.1) entering learning state
+group1: port 1(eth2.1) entering learning state
+group1: port 1(eth2.1) entering learning state
+group1: port 1(eth2.1) entering learning state
+RT305x_ESW: Link Status Changed reg_int_val is 4000000, 4000000
+TX_BCN DESC a3f03000 size = 320
+RX[0] DESC a3f06000 size = 1024
+RX[1] DESC a3f07000 size = 1024
+E2pAccessMode=2
+cfg_mode=9
+cfg_mode=9
+wmode_band_equal(): Band Equal!
+AndesSendCmdMsg: Could not send in band command due to diable fRTMP_ADAPTER_MCU_SEND_IN_BAND_CMD
+APSDCapable[0]=0
+APSDCapable[1]=0
+APSDCapable[2]=0
+APSDCapable[3]=0
+APSDCapable[4]=0
+APSDCapable[5]=0
+APSDCapable[6]=0
+APSDCapable[7]=0
+APSDCapable[8]=0
+APSDCapable[9]=0
+APSDCapable[10]=0
+APSDCapable[11]=0
+APSDCapable[12]=0
+APSDCapable[13]=0
+APSDCapable[14]=0
+APSDCapable[15]=0
+Key1Str is Invalid key length(0) or Type(0)
+Key1Str is Invalid key length(0) or Type(0)
+Key2Str is Invalid key length(0) or Type(0)
+Key2Str is Invalid key length(0) or Type(0)
+Key3Str is Invalid key length(0) or Type(0)
+Key3Str is Invalid key length(0) or Type(0)
+Key4Str is Invalid key length(0) or Type(0)
+Key4Str is Invalid key length(0) or Type(0)
+WscKeyASCII=1
+RTMPSetDefaultChannel() : default channel to 1
+load fw image from fw_header_image
+AndesMTLoadFwMethod1(2182)::pChipCap->fw_len(63888)
+FW Version:20151201
+FW Build Date:20151201183641
+CmdAddressLenReq:(ret = 0)
+CmdFwStartReq: override = 1, address = 1048576
+CmdStartDLRsp: WiFI FW Download Success
+MtAsicDMASchedulerInit(): DMA Scheduler Mode=0(LMAC)
+efuse_probe: efuse = 10000002
+RtmpChipOpsEepromHook::e2p_type=2, inf_Type=4
+RtmpEepromGetDefault::e2p_dafault=2
+RtmpChipOpsEepromHook: E2P type(2), E2pAccessMode = 2, E2P default = 2
+NVM is FLASH mode
+1. Phy Mode = 14
+RT305x_ESW: Link Status Changed reg_int_val is 4000000, 4000000
+Country Region from e2p = ffff
+tssi_1_target_pwr_g_band = 38
+2. Phy Mode = 14
+3. Phy Mode = 14
+NICInitPwrPinCfg(11): Not support for HIF_MT yet!
+NICInitializeAsic(651): Not support rtmp_mac_sys_reset () for HIF_MT yet!
+mt_mac_init()-->
+MtAsicInitMac()-->
+mt7628_init_mac_cr()-->
+MtAsicSetMacMaxLen(1276): Set the Max RxPktLen=1024!
+mt_mac_init()
+        WTBL Segment 1 info:
+                MemBaseAddr/FID:0x28000/0
+                EntrySize/Cnt:32/128
+        WTBL Segment 2 info:
+                MemBaseAddr/FID:0x40000/0
+                EntrySize/Cnt:64/128
+        WTBL Segment 3 info:
+                MemBaseAddr/FID:0x42000/64
+                EntrySize/Cnt:64/128
+        WTBL Segment 4 info:
+                MemBaseAddr/FID:0x44000/128
+                EntrySize/Cnt:32/128
+AntCfgInit(2947): Not support for HIF_MT yet!
+MCS Set = ff ff 00 00 01
+MtAsicSetChBusyStat(861): Not support for HIF_MT yet!
+CmdSlotTimeSet:(ret = 0)
+SYNC - BBP R4 to 20MHz.l
+SYNC - BBP R4 to 20MHz.l
+SYNC - BBP R4 to 20MHz.l
+SYNC - BBP R4 to 20MHz.l
+SYNC - BBP R4 to 20MHz.l
+SYNC - BBP R4 to 20MHz.l
+SYNC - BBP R4 to 20MHz.l
+SYNC - BBP R4 to 20MHz.l
+SYNC - BBP R4 to 20MHz.l
+SYNC - BBP R4 to 20MHz.l
+MtAsicSetRalinkBurstMode(3047): Not support for HIF_MT yet!
+MtAsicSetPiggyBack(796): Not support for HIF_MT yet!
+reload DPD from flash , 0x9F = [c100] doReload bit7[0]
+CmdLoadDPDDataFromFlash: Channel = 3, DoReload = 0
+MtAsicSetTxPreamble(3026): Not support for HIF_MT yet!
+MtAsicAddSharedKeyEntry(1343): Not support for HIF_MT yet!
+The 2-BSSID mode is enabled, the BSSID byte5 MUST be the multiple of 2
+MtAsicSetPreTbtt(): bss_idx=0, PreTBTT timeout = 0xf0
+Main bssid = 14:59:c0:b5:a5:ef
+== rt28xx_init, Status=0
+@@@ ed_monitor_exit : ===>
+@@@ ed_monitor_exit : <===
+mt7628_set_ed_cca: TURN OFF EDCCA  mac 0x10618 = 0xd7083f0f, EDCCA_Status=0
+WiFi Startup Cost (ra0): 6.232s
+device ra0 entered promiscuous mode
+group1: port 2(ra0) entering learning state
+group1: port 2(ra0) entering learning state
+build time =
+20141115060606a
+rom patch for E3 IC
+
+platform =
+ALPS
+hw/sw version =
+
+patch version =
+
+FW Version:0.0.00 Build:1
+Build Time:201507311614____
+fw for E3 IC
+RX[0] DESC a28f2000 size = 4096
+RX[1] DESC a28f3000 size = 4096
+E2pAccessMode=2
+cfg_mode=14
+cfg_mode=14
+wmode_band_equal(): Band Not Equal!
+APSDCapable[0]=0
+APSDCapable[1]=0
+APSDCapable[2]=0
+APSDCapable[3]=0
+APSDCapable[4]=0
+APSDCapable[5]=0
+APSDCapable[6]=0
+APSDCapable[7]=0
+APSDCapable[8]=0
+APSDCapable[9]=0
+APSDCapable[10]=0
+APSDCapable[11]=0
+APSDCapable[12]=0
+APSDCapable[13]=0
+APSDCapable[14]=0
+APSDCapable[15]=0
+Key1Str is Invalid key length(0) or Type(0)
+Key1Str is Invalid key length(0) or Type(0)
+Key2Str is Invalid key length(0) or Type(0)
+Key2Str is Invalid key length(0) or Type(0)
+Key3Str is Invalid key length(0) or Type(0)
+Key3Str is Invalid key length(0) or Type(0)
+Key4Str is Invalid key length(0) or Type(0)
+Key4Str is Invalid key length(0) or Type(0)
+1. Phy Mode = 49
+get_chl_grp:illegal channel (167)
+get_chl_grp:illegal channel (167)
+get_chl_grp:illegal channel (169)
+get_chl_grp:illegal channel (169)
+get_chl_grp:illegal channel (171)
+get_chl_grp:illegal channel (171)
+drivers/net/wireless/rlt_wifi_ap/../rlt_wifi/chips/mt76x2.c:2899 assert (ad->TxPower[choffset].Channel == 42)failed
+Country Region from e2p = ffff
+mt76x2_read_temp_info_from_eeprom:: is_temp_tx_alc=0, temp_tx_alc_enable=0
+mt76x2_read_tx_alc_info_from_eeprom:: is_ePA_mode=0, ePA_type=3
+mt76x2_read_tx_alc_info_from_eeprom:: [5G band] high_temp_slope=0, low_temp_slope=0
+mt76x2_read_tx_alc_info_from_eeprom:: [2G band] high_temp_slope=0, low_temp_slope=0
+mt76x2_read_tx_alc_info_from_eeprom:: [5G band] tc_lower_bound=0, tc_upper_bound=0
+mt76x2_read_tx_alc_info_from_eeprom:: [2G band] tc_lower_bound=0, tc_upper_bound=0
+mt76x2_get_external_lna_gain::LNA type=0x11, BLNAGain=0x0, ALNAGain0=0x0, ALNAGain1=0x0, ALNAGain2=0x0
+2. Phy Mode = 49
+3. Phy Mode = 49
+andes_pci_fw_init
+0x1300 = 00073200
+AntCfgInit: primary/secondary ant 0/1
+andes_load_cr:cr_type(2)
+ChipStructAssign(): MT76x2 hook !
+RTMPSetPhyMode: channel is out of range, use first channel=0
+MCS Set = ff ff 00 00 01
+TX0 power compensation = 0x38
+TX1 power compensation = 0x38
+group1: port 2(ra0) entering forwarding state
+group1: port 1(eth2.1) entering forwarding state
+mt76x2_bbp_adjust():rf_bw=2, ext_ch=1, PrimCh=149, HT-CentCh=151, VHT-CentCh=155
+APStartUp(): AP Set CentralFreq at 155(Prim=149, HT-CentCh=151, VHT-CentCh=155, BBP_BW=2)
+mt76x2_calibration(channel = 155)
+The 2-BSSID mode is enabled, the BSSID byte5 MUST be the multiple of 2
+@@@ ed_monitor_exit : ===>
+@@@ ed_monitor_exit : <===
+Main bssid = 14:59:c0:b5:a5:f1
+mt76x2_reinit_agc_gain:original agc_vga0 = 0x5c, agc_vga1 = 0x5c
+mt76x2_reinit_agc_gain:updated agc_vga0 = 0x5c, agc_vga1 = 0x5c
+mt76x2_reinit_hi_lna_gain:original hi_lna0 = 0x27, hi_lna1 = 0x27
+mt76x2_reinit_hi_lna_gain:updated hi_lna0 = 0x27, hi_lna1 = 0x27
+original vga value(chain0) = 5c
+original vga value(chain1) = 5c
+== rt28xx_init, Status=0
+get_dev_name_prefix(): dev_idx = 1, dev_name_prefix=rai
+RTMPDrvOpen(1):Check if PDMA is idle!
+RTMPDrvOpen(2):Check if PDMA is idle!
+device rai0 entered promiscuous mode
+group1: port 3(rai0) entering learning state
+group1: port 3(rai0) entering learning state
+net/netfilter/nf_conntrack_sip.c: write_proc: file: 83499f60, buffer: 1
+, count: 2, data: 00000000
+group1: port 3(rai0) entering forwarding state
+device rai1 entered promiscuous mode
+device ra1 entered promiscuous mode
+wan interface=[eth2.2], index=10
+RT305x_ESW: Link Status Changed reg_int_val is 4000000, 4000000
+--------------------------------------------------------------------------------
+FLASH PARTITION SIZES
+
+mtd0:  256    KiB........"Bootloader"
+mtd1:  128    KiB........"Factory"
+mtd2:  64     KiB........"Ralink Nvram"
+mtd3:  64     KiB........"SC_Factory"
+mtd4:  64     KiB........"SC_NVRAM"
+mtd5:  1600   KiB........"Kernel"
+mtd6:  5504   KiB........"RootFS"
+mtd7:  128    KiB........"ML"
+mtd8:  128    KiB........"ML1"
+mtd9:  128    KiB........"ML2"
+mtd10: 64     KiB........"POT"
+mtd11: 64     KiB........"Reserved"
