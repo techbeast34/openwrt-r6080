@@ -1,3 +1,10 @@
+## This repo will not be maintained
+
+Turns out [Alex Lewontin](https://github.com/alexclewontin) had already authored support for the R6080 in February 2020, but the changes weren't committed until June 26th, 2020. That commit can be [seen here](https://github.com/openwrt/openwrt/commit/bd49f2c9848ec10c7c7b41eaa14ac6c26e2bc977). Guess all I had to do was wait a month ¯\\\_(ツ)_/¯
+
+Regardless, it was a fun project. Also, after opening up my R6080, I found that the board still has the contacts necessary to add a USB port, but a lot of SMT components would need to be soldered on. If I manage to track down the components and get my hands on a hot air station, I might attempt to do this down the line.
+
+---
 # NETGEAR R6080 Router OpenWRT Firmware
 
 added support for NETGEAR R6080 (in testing). Must be installed via [nmrpflash](https://github.com/jclehner/nmrpflash)
